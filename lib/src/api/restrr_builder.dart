@@ -1,6 +1,7 @@
 import '../../restrr.dart';
 import '../internal/requests/responses/rest_response.dart';
 import '../internal/restrr_impl.dart';
+import '../internal/utils/request_utils.dart';
 
 /// A builder for creating a new [Restrr] instance.
 /// The [Restrr] instance is created by calling [create].
@@ -41,7 +42,8 @@ class RestrrBuilder {
     });
   }
 
-  Future<Restrr> _handleAuthProcess({required Future<RestResponse<PartialSession>> Function(RestrrImpl) authFunction}) async {
+  Future<Restrr> _handleAuthProcess(
+      {required Future<RestResponse<PartialSession>> Function(RestrrImpl) authFunction}) async {
     // check if the URI is valid and the API is healthy
     final ServerInfo statusResponse = await Restrr.checkUri(uri, isWeb: options.isWeb);
     Restrr.log.config('Host: $uri, API v${statusResponse.apiVersion}');
@@ -59,6 +61,14 @@ class RestrrBuilder {
       throw ArgumentError('The response data is not a session');
     }
     apiImpl.session = response.data! as Session;
+
+    /// Retrieve all accounts & currencies to make them available in the cache
+    final List<Account> accounts = await RequestUtils.fetchAllPaginated(apiImpl, await apiImpl.retrieveAllAccounts(limit: 50));
+    Restrr.log.info('Cached ${accounts.length} account(s)');
+
+    final List<Currency> currencies = await RequestUtils.fetchAllPaginated(apiImpl, await apiImpl.retrieveAllCurrencies(limit: 50));
+    Restrr.log.info('Cached ${currencies.length} currencies');
+
     apiImpl.eventHandler.fire(ReadyEvent(api: apiImpl));
     return apiImpl;
   }

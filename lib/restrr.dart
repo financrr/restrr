@@ -10,8 +10,11 @@ export 'src/api/entities/currency/currency.dart';
 export 'src/api/entities/currency/custom_currency.dart';
 export 'src/api/entities/session/partial_session.dart';
 export 'src/api/entities/session/session.dart';
-export 'src/api/entities/user.dart';
+export 'src/api/entities/account.dart';
 export 'src/api/entities/restrr_entity.dart';
+export 'src/api/entities/transaction/transaction.dart';
+export 'src/api/entities/transaction/transaction_type.dart';
+export 'src/api/entities/user.dart';
 
 /* [ /src/api/events ] */
 export 'src/api/events/ready_event.dart';

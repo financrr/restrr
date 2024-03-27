@@ -1,4 +1,5 @@
 import 'package:restrr/src/internal/entities/restrr_entity_impl.dart';
+import 'package:restrr/src/internal/requests/responses/rest_response.dart';
 
 import '../../../../restrr.dart';
 
@@ -23,7 +24,8 @@ class PartialSessionImpl extends RestrrEntityImpl implements PartialSession {
 
   @override
   Future<bool> delete() async {
-    final response = await api.requestHandler.noResponseApiRequest(route: SessionRoutes.getById.compile(params: [id]));
+    final RestResponse<bool> response =
+        await api.requestHandler.noResponseApiRequest(route: SessionRoutes.deleteById.compile(params: [id]));
     return response.hasData && response.data!;
   }
 }

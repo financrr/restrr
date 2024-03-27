@@ -19,6 +19,8 @@ abstract class MapCacheView<K, V> {
 
   V? get(K key) => _cache[key];
 
+  List<V> getAll() => _cache.values.toList();
+
   V cache(V value) => _cache[valueFunction.call(value)] = value;
 
   void clear() => _cache.clear();

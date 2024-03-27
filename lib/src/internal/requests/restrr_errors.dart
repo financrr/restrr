@@ -2,17 +2,34 @@ import 'package:restrr/restrr.dart';
 import 'package:restrr/src/internal/requests/responses/rest_response.dart';
 
 enum RestrrError {
-  unknown(0xFFF0, 'Unknown error occurred'),
-  internalServerError(0xFFF1, 'Internal server error occurred'),
-  serviceUnavailable(0xFFF3, 'Service is unavailable'),
+  /* Not thrown by the server directly, but still server-related */
+  internalServerError(0000, 'Internal server error!'),
+  serviceUnavailable(0001, 'Service unavailable!'),
 
-  invalidSession(0x0001, 'Session expired or invalid!'),
-  sessionLimitReached(0x0002, 'Session limit reached!'),
-  signedIn(0x0003, 'User is signed in.'),
-  invalidCredentials(0x0004, 'Invalid credentials provided.'),
-  resourceNotFound(0x0005, 'Resource not found.'),
-  unauthorized(0x0006, 'Unauthorized.'),
-  noTokenProvided(0x0007, 'No token provided.'),
+  /* Authentication errors */
+  invalidSession(1000, 'Invalid session!'),
+  sessionLimitReached(1001, 'Session limit reached!'),
+  invalidCredentials(1002, 'Invalid credentials provided!'),
+  unauthorized(1004, 'Unauthorized!'),
+  noTokenProvided(1006, 'No bearer token provided!'),
+
+  /* Client errors */
+  resourceNotFound(1100, 'Requested resource was not found!'),
+  serializationError(1101, 'Serialization error!'),
+  missingPermissions(1102, 'Missing permissions!'),
+
+  /* Validation errors */
+  jsonPayloadValidationError(1200, 'JSON payload validation error!'),
+  genericValidationError(1201, 'Validation error!'),
+
+  /* Server errors */
+  entityError(1300, "DB-Entity error!"),
+  dbError(1301, "Database error!"),
+  redisError(1302, "Redis error!"),
+
+  /* Misc errors */
+  actixError(9000, "Actix error!"),
+  unknown(9999, 'Unknown error!'),
   ;
 
   final int code;
@@ -22,9 +39,9 @@ enum RestrrError {
 
   // TODO: replace this with status code in the future
 
-  static RestrrError? fromStatusMessage(String message) {
+  static RestrrError? fromCode(int errorCode) {
     for (RestrrError value in RestrrError.values) {
-      if (value.message == message) {
+      if (value.code == errorCode) {
         return value;
       }
     }

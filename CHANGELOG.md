@@ -1,3 +1,18 @@
+## 0.8
+- Cache accounts & currencies on startup
+- Added `Account`
+  - Added `AccountRoutes`
+  - Added `Account` methods: `delete`, `update`, `retrieveTransactions`, `getCurrency`, `retrieveCurrency`
+  - Added `Restrr` methods: `createAccount`, `getAccounts`, `retrieveAccountById`, `retrieveAllAccounts`
+- Added `Transaction`
+  - Added `TransactionRoutes`
+  - Added `Transaction` methods: `delete`, `update`, `getSourceAccount`, `getDestinationAccount`, `retrieveSourceAccount`, `retrieveDestinationAccount`
+  - Added `Restrr` methods: `createTransaction`, `retrieveTransactionById`, `retrieveAllTransactions`
+- Added `Restrr#getCurrencies`
+- Fixed `Session#delete` using a wrong route
+- Implemented actual `RestrrError` error codes
+  - Added `ErrorResponse#apiCode` 
+
 ## 0.7
 - Restructured package (many breaking changes!)
   - Split package into `api` (abstraction) and `internal` (implementation)

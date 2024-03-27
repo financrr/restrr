@@ -8,6 +8,20 @@ import '../requests/responses/rest_response.dart';
 class RequestUtils {
   const RequestUtils._();
 
+  static Future<List<T>> fetchAllPaginated<T extends RestrrEntity>(Restrr api, Paginated<T> firstBatch, {Duration? delay}) async {
+    final List<T> all = [...firstBatch.items];
+    Paginated<T> current = firstBatch;
+    while (current.hasNext) {
+      if (delay != null) {
+        await Future.delayed(delay);
+      }
+      final Paginated<T> next = await current.nextPage!.call(api);
+      current = next;
+      all.addAll(next.items);
+    }
+    return all;
+  }
+
   static Future<T> getOrRetrieveSingle<T extends RestrrEntity>(
       {required Id key,
       required EntityCacheView<T> cacheView,

@@ -84,7 +84,11 @@ class CompiledRoute {
         headers: headers,
         data: body,
         method: baseRoute.method,
-        baseUrl: _buildBaseUrl(routeOptions, baseRoute.isVersioned)));
+        baseUrl: _buildBaseUrl(routeOptions, baseRoute.isVersioned)))
+        .then((response) {
+          Restrr.log.info('${baseRoute.method} $compiledRoute => ${response.statusCode} ${response.statusMessage}');
+          return response;
+        });
   }
 
   String _buildBaseUrl(RouteOptions options, bool isVersioned) {
